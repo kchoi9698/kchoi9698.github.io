@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Kun Choi" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 2</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project2/">Project 2</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 6, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="../../rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<div id="for-this-project-i-have-chosen-to-work-with-the-dose-mortality-dataset-built-into-r-studio.-this-dataset-givese-the-dose-mortality-for-fumagation-of-codling-moth-from-an-injection-of-methyl-bromide.-of-the-10-different-variables-i-will-be-focusing-on-dose-of-injected-methyl-bromide-in-gmcubic-meter-tot-total-number-of-moths-dead-number-of-dead-moths-cm-control-mortality-at-dose-0-cultivar-factor-of-levels-of-different-types-of-the-dose-and-year-which-will-be-manipulated-to-be-binary-since-it-only-includes-1988-and-1989.-there-will-be-a-total-of-99-observations-and-only-the-six-variables-i-mentioned-above.-the-numeric-variables-will-be-dose-tot-dead-and-cm-while-year-will-be-converted-to-binary.-cultivar-will-serve-as-our-one-categorical-variable." class="section level5">
+<h5>For this project, I have chosen to work with the Dose-Mortality dataset built into R Studio. This dataset givese the dose-mortality for fumagation of codling moth from an injection of methyl bromide. Of the 10 different variables, I will be focusing on dose (of injected methyl bromide in gm/cubic meter), tot (total number of moths), dead (number of dead moths), cm (control mortality at dose 0), Cultivar (factor of levels of different types of the dose), and year (which will be manipulated to be binary since it only includes 1988 and 1989). There will be a total of 99 observations and only the six variables I mentioned above. The numeric variables will be dose, tot, dead, and cm while year will be converted to binary. Cultivar will serve as our one categorical variable.</h5>
+<hr />
+</div>
+</div>
+<div id="manova-test" class="section level2">
+<h2>1. MANOVA Test</h2>
+<pre class="r"><code>man1 &lt;- manova(cbind(dose, dead)~Cultivar, data=Mortality)
+summary(man1)</code></pre>
+<pre><code>##           Df  Pillai approx F num Df den Df    Pr(&gt;F)    
+## Cultivar   6 0.47911   4.8303     12    184 6.954e-07 ***
+## Residuals 92                                             
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary.aov(man1)</code></pre>
+<pre><code>##  Response dose :
+##             Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Cultivar     6  227.8  37.964   0.683 0.6637
+## Residuals   92 5113.5  55.582               
+## 
+##  Response dead :
+##             Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Cultivar     6 3885714  647619  8.1397 4.573e-07 ***
+## Residuals   92 7319783   79563                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>Mortality%&gt;%group_by(Cultivar)%&gt;%summarize(mean(dose),mean(dead))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 7 x 3
+##   Cultivar      `mean(dose)` `mean(dead)`
+##   &lt;chr&gt;                &lt;dbl&gt;        &lt;dbl&gt;
+## 1 BRAEBURN              18.9         331.
+## 2 FUJI                  18.3         308.
+## 3 Gala                  18.3         414.
+## 4 GRANNY                18.3         310.
+## 5 Red Delicious         18.7         393.
+## 6 ROYAL                 14.2         334.
+## 7 Splendour             19.5         976.</code></pre>
+<pre class="r"><code>pairwise.t.test(Mortality$dose, Mortality$Cultivar, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  Mortality$dose and Mortality$Cultivar 
+## 
+##               BRAEBURN FUJI  Gala  GRANNY Red Delicious ROYAL
+## FUJI          0.854    -     -     -      -             -    
+## Gala          0.854    1.000 -     -      -             -    
+## GRANNY        0.854    1.000 1.000 -      -             -    
+## Red Delicious 0.934    0.890 0.890 0.890  -             -    
+## ROYAL         0.131    0.174 0.174 0.174  0.080         -    
+## Splendour     0.842    0.698 0.698 0.698  0.747         0.087
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(Mortality$dead, Mortality$Cultivar, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  Mortality$dead and Mortality$Cultivar 
+## 
+##               BRAEBURN FUJI    Gala    GRANNY  Red Delicious ROYAL  
+## FUJI          0.85     -       -       -       -             -      
+## Gala          0.48     0.36    -       -       -             -      
+## GRANNY        0.86     0.99    0.37    -       -             -      
+## Red Delicious 0.54     0.38    0.83    0.39    -             -      
+## ROYAL         0.98     0.83    0.49    0.84    0.54          -      
+## Splendour     6.2e-07  1.6e-07 6.9e-06 1.8e-07 8.1e-08       4.1e-07
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>0.05/45</code></pre>
+<pre><code>## [1] 0.001111111</code></pre>
+<div id="we-conducted-a-one-way-manova-in-order-to-determine-the-effect-of-cultivar-type-braeburn-fuji-gala-granny-red-delicious-royal-on-our-two-dependent-variables-dose-of-injection-and-number-of-dead-insects.-for-our-manova-assumptions-we-can-assume-that-the-observations-are-random-samples-and-independent-from-one-another.-it-is-not-certain-whether-the-dependent-variables-met-the-anova-assumption-of-normal-distribution-within-each-group-and-the-manova-assumption-of-multivariate-normality-but-we-will-proceed-with-caution.-homogeneity-of-within-group-covariance-matrices-and-linear-relationships-among-the-dependent-variables-are-also-assumed.-we-do-not-see-any-extreme-outliers-and-we-assume-there-is-no-correlation-within-the-dependent-variables." class="section level5">
+<h5>We conducted a one-way MANOVA in order to determine the effect of Cultivar type (BRAEBURN, FUJI, Gala, GRANNY, Red, Delicious, ROYAL) on our two dependent variables (dose of injection and number of dead insects). For our MANOVA assumptions, we can assume that the observations are random samples and independent from one another. It is not certain whether the dependent variables met the ANOVA assumption of normal distribution within each group and the MANOVA assumption of multivariate normality, but we will proceed with caution. Homogeneity of within-group covariance matrices and linear relationships among the dependent variables are also assumed. We do not see any extreme outliers and we assume there is no correlation within the dependent variables.</h5>
+</div>
+<div id="significant-differences-were-found-between-the-dose-and-death-number-for-at-least-one-of-the-dependent-variables-pillai-0.48-pseduo-f-12-184-4.83-p-0.0001.-the-bonferroni-method-was-used-to-control-type-i-error-rates-0.0011.-univariate-anovas-and-post-hoc-analysis-was-also-confirmed.-among-our-pairwise-t-tests-only-splendour-showed-significance-with-all-the-other-cultivar-types-when-comparing-the-number-of-dead-insects." class="section level5">
+<h5>Significant differences were found between the dose and death number for at least one of the dependent variables, Pillai = 0.48, pseduo F (12, 184) = 4.83, p &lt; 0.0001. The Bonferroni method was used to control Type I error rates (0.0011). Univariate ANOVAs and post-hoc analysis was also confirmed. Among our pairwise t tests, only Splendour showed significance with all the other Cultivar types when comparing the number of dead insects.</h5>
+<hr />
+</div>
+</div>
+<div id="randomization-test" class="section level2">
+<h2>2. Randomization Test</h2>
+<pre class="r"><code>summary(aov(dead~dose,data=Mortality))</code></pre>
+<pre><code>##             Df  Sum Sq Mean Sq F value   Pr(&gt;F)    
+## dose         1 3227779 3227779   39.25 1.03e-08 ***
+## Residuals   97 7977718   82245                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>library(ggplot2)
+Fstat&lt;-vector()
+for(i in 1:10000){
+g1&lt;-rnorm(36)
+g2&lt;-rnorm(36)
+g3&lt;-rnorm(36)
+SSW&lt;- sum((g1-mean(g1))^2+(g2-mean(g2))^2+(g3-mean(g3))^2)
+SSB&lt;- 36*sum( (mean(c(g1,g2,g3))-c(mean(g1),mean(g2),mean(g3)))^2 )
+Fstat[i]&lt;- (SSB/2)/(SSW/105)
+}
+data.frame(Fstat) %&gt;%
+  ggplot(aes(Fstat)) + geom_histogram(aes(y=..density..))+
+  stat_function(fun=dt,args=list(df=35),geom=&quot;line&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div id="ho-the-mean-number-of-dead-insects-does-not-differ-based-on-the-mean-dose-received." class="section level5">
+<h5>Ho: The mean number of dead insects does not differ based on the mean dose received.</h5>
+</div>
+<div id="ha-the-mean-number-of-dead-insects-does-differ-based-on-the-mean-dose-received." class="section level5">
+<h5>HA: The mean number of dead insects does differ based on the mean dose received.</h5>
+</div>
+<div id="according-to-these-results-we-can-see-that-there-is-a-significant-difference-in-the-mean-of-dead-insects-across-the-different-number-of-mean-dose-given-f39.25-df-197-p-0.001.-we-also-created-a-plot-to-visualize-the-null-distribution-and-the-test-statistic-to-see-what-the-randomization-test-would-look-like-if-the-mean-number-of-dead-insects-were-not-dependent-on-the-dose-received." class="section level5">
+<h5>According to these results, we can see that there is a significant difference in the mean of dead insects across the different number of mean dose given (F=39.25, df= (1,97), p &lt; 0.001). We also created a plot to visualize the null distribution and the test statistic to see what the randomization test would look like if the mean number of dead insects were not dependent on the dose received.</h5>
+<hr />
+</div>
+</div>
+<div id="linear-regression-model" class="section level2">
+<h2>3. Linear Regression Model</h2>
+<pre class="r"><code>Mortality$dose_c &lt;- Mortality$dose - mean(Mortality$dose)
+Mortality$dead_c &lt;- Mortality$dead - mean(Mortality$dead)
+fit &lt;- lm(dead_c ~ Cultivar*dose_c, data=Mortality)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dead_c ~ Cultivar * dose_c, data = Mortality)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -643.71 -104.31  -27.20   73.63  622.42 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                  -103.060     66.263  -1.555   0.1236    
+## CultivarFUJI                  -17.924     91.514  -0.196   0.8452    
+## CultivarGala                   84.754     91.514   0.926   0.3570    
+## CultivarGRANNY                -16.198     91.514  -0.177   0.8599    
+## CultivarRed Delicious          56.820     77.769   0.731   0.4670    
+## CultivarROYAL                 100.416     99.052   1.014   0.3136    
+## CultivarSplendour             591.118     94.392   6.262 1.49e-08 ***
+## dose_c                         10.727      8.901   1.205   0.2315    
+## CultivarFUJI:dose_c             5.746     12.374   0.464   0.6435    
+## CultivarGala:dose_c            21.366     12.374   1.727   0.0879 .  
+## CultivarGRANNY:dose_c           5.862     12.374   0.474   0.6369    
+## CultivarRed Delicious:dose_c   13.313     10.533   1.264   0.2097    
+## CultivarROYAL:dose_c           11.914     13.069   0.912   0.3646    
+## CultivarSplendour:dose_c       32.889     12.933   2.543   0.0128 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 218.6 on 85 degrees of freedom
+## Multiple R-squared:  0.6376, Adjusted R-squared:  0.5822 
+## F-statistic:  11.5 on 13 and 85 DF,  p-value: 7.814e-14</code></pre>
+<pre class="r"><code>ggplot(Mortality, aes(dose,dead, color = Cultivar)) + geom_smooth(method = &quot;lm&quot;, se = F, fullrange = T)+
+geom_point()+geom_vline(xintercept=0,lty=2)+geom_vline(xintercept=mean(Mortality$dose))</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>resids&lt;-fit$residuals
+fitvals&lt;-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, color=&#39;red&#39;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>ggplot()+geom_histogram(aes(resids), bins=20)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code>shapiro.test(resids) </code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  resids
+## W = 0.93471, p-value = 0.0001009</code></pre>
+<pre class="r"><code>library(sandwich)
+library(lmtest)</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre class="r"><code>bptest(fit)</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  fit
+## BP = 59.009, df = 13, p-value = 7.895e-08</code></pre>
+<pre class="r"><code>summary(fit)$coef[,1:2]</code></pre>
+<pre><code>##                                 Estimate Std. Error
+## (Intercept)                  -103.060222  66.263469
+## CultivarFUJI                  -17.924262  91.514301
+## CultivarGala                   84.753599  91.514301
+## CultivarGRANNY                -16.197692  91.514301
+## CultivarRed Delicious          56.820440  77.769193
+## CultivarROYAL                 100.415533  99.051905
+## CultivarSplendour             591.118290  94.391676
+## dose_c                         10.726779   8.901456
+## CultivarFUJI:dose_c             5.746417  12.373772
+## CultivarGala:dose_c            21.366004  12.373772
+## CultivarGRANNY:dose_c           5.862396  12.373772
+## CultivarRed Delicious:dose_c   13.312781  10.533410
+## CultivarROYAL:dose_c           11.913796  13.069497
+## CultivarSplendour:dose_c       32.889301  12.932832</code></pre>
+<pre class="r"><code>coeftest(fit, vcov = vcovHC(fit))[,1:2]</code></pre>
+<pre><code>##                                 Estimate Std. Error
+## (Intercept)                  -103.060222  31.045710
+## CultivarFUJI                  -17.924262  39.602221
+## CultivarGala                   84.753599  95.599103
+## CultivarGRANNY                -16.197692  47.228905
+## CultivarRed Delicious          56.820440  49.896315
+## CultivarROYAL                 100.415533  58.921928
+## CultivarSplendour             591.118290 137.180350
+## dose_c                         10.726779   2.065334
+## CultivarFUJI:dose_c             5.746417   4.138574
+## CultivarGala:dose_c            21.366004  18.536930
+## CultivarGRANNY:dose_c           5.862396   6.156682
+## CultivarRed Delicious:dose_c   13.312781   7.469668
+## CultivarROYAL:dose_c           11.913796   6.449647
+## CultivarSplendour:dose_c       32.889301  25.424988</code></pre>
+<pre class="r"><code>summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dead_c ~ Cultivar * dose_c, data = Mortality)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -643.71 -104.31  -27.20   73.63  622.42 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                  -103.060     66.263  -1.555   0.1236    
+## CultivarFUJI                  -17.924     91.514  -0.196   0.8452    
+## CultivarGala                   84.754     91.514   0.926   0.3570    
+## CultivarGRANNY                -16.198     91.514  -0.177   0.8599    
+## CultivarRed Delicious          56.820     77.769   0.731   0.4670    
+## CultivarROYAL                 100.416     99.052   1.014   0.3136    
+## CultivarSplendour             591.118     94.392   6.262 1.49e-08 ***
+## dose_c                         10.727      8.901   1.205   0.2315    
+## CultivarFUJI:dose_c             5.746     12.374   0.464   0.6435    
+## CultivarGala:dose_c            21.366     12.374   1.727   0.0879 .  
+## CultivarGRANNY:dose_c           5.862     12.374   0.474   0.6369    
+## CultivarRed Delicious:dose_c   13.313     10.533   1.264   0.2097    
+## CultivarROYAL:dose_c           11.914     13.069   0.912   0.3646    
+## CultivarSplendour:dose_c       32.889     12.933   2.543   0.0128 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 218.6 on 85 degrees of freedom
+## Multiple R-squared:  0.6376, Adjusted R-squared:  0.5822 
+## F-statistic:  11.5 on 13 and 85 DF,  p-value: 7.814e-14</code></pre>
+<div id="looking-at-the-coefficient-estimates-we-can-see-that-an-intercept-of--103.060-is-the-mean-number-of-dead-insects-centered-for-the-braeburn-category-with-average-centered-dosage.-the-fuji-and-granny-categories-with-average-dosage-have-predicted-number-of-dead-of-17.924-and-16.198-lower-than-the-braeburn-category-with-average-dose-respectively.-the-gala-red-delicious-royal-and-splendour-categories-with-average-dosage-have-predicted-number-of-dead-insects-of-84.754-56.820-100.416-and-591.118-higher-than-the-braeburn-category-respectively.-for-every-1-unit-increase-in-dosage-predicted-number-of-dead-goes-up-by-10.727-insects-for-the-braeburn-category.-slopes-of-dose-on-number-of-dead-for-fuji-gala-granny-red-delicious-royal-and-splendour-are-5.746-21.366-5.862-13.313-11.914-and-32.889-greater-than-for-braeburn-respectively." class="section level5">
+<h5>Looking at the coefficient estimates, we can see that an intercept of -103.060 is the mean number of dead insects (centered) for the Braeburn category with average centered dosage. The Fuji and Granny categories with average dosage have predicted number of dead of 17.924 and 16.198 lower than the Braeburn category with average dose respectively. The Gala, Red Delicious, Royal, and Splendour categories with average dosage have predicted number of dead insects of 84.754, 56.820, 100.416, and 591.118 higher than the Braeburn category respectively. For every 1-unit increase in dosage, predicted number of dead goes up by 10.727 insects for the Braeburn category. Slopes of dose on number of dead for Fuji, Gala, Granny, Red Delicious, Royal, and Splendour are 5.746, 21.366, 5.862, 13.313, 11.914, and 32.889 greater than for Braeburn respectively.</h5>
+</div>
+<div id="after-plotting-the-regression-usign-ggplot-we-checked-if-our-dataset-met-the-assumptions-of-linearity-normality-and-homoskedacity.-using-the-residuals-from-our-fit-dataset-and-graphing-it-we-can-see-that-it-fails-the-linearity-and-homoskedacity-test-because-of-its-uneven-scatter-and-tendency-to-the-left-of-the-graph.-graphing-a-histogram-shows-how-our-dataset-might-pass-the-normality-test-but-upon-running-the-shapiro-wilke-test-we-can-see-that-is-fails-p0.0001." class="section level5">
+<h5>After plotting the regression usign ggplot, we checked if our dataset met the assumptions of linearity, normality, and homoskedacity. Using the residuals from our fit dataset and graphing it, we can see that it fails the linearity and homoskedacity test because of its uneven scatter and tendency to the left of the graph. Graphing a histogram shows how our dataset might pass the normality test but upon running the Shapiro-Wilke test, we can see that is fails (p=0.0001).</h5>
+</div>
+<div id="we-then-recomputed-the-regression-results-with-robust-standard-errors.-after-running-the-bp-test-on-our-fitted-data-we-see-a-significant-p-value-less-than-0.05-which-means-we-reject-our-null-hypothesis-of-homoskedacity-our-dataset-fails-homoskedacity.-comparing-the-changes-before-and-after-the-robust-ses-we-see-significant-variation-in-standard-errors-so-our-conclusion-that-it-fails-homoskedacity-is-verified." class="section level5">
+<h5>We then recomputed the regression results with robust standard errors. After running the bp test on our fitted data, we see a significant p-value less than 0.05, which means we reject our null hypothesis of homoskedacity (our dataset fails homoskedacity). Comparing the changes before and after the robust SEs, we see significant variation in standard errors so our conclusion that it fails homoskedacity is verified.</h5>
+</div>
+<div id="finally-we-can-see-after-running-summaryfit-that-0.6376-of-the-variation-in-the-outcome-can-be-explained-by-our-model-we-conducted." class="section level5">
+<h5>Finally, we can see after running summary(fit) that 0.6376 of the variation in the outcome can be explained by our model we conducted.</h5>
+<hr />
+</div>
+</div>
+<div id="bootstrapped-standard-error" class="section level2">
+<h2>4. Bootstrapped Standard Error</h2>
+<pre class="r"><code>samps&lt;-replicate(5000, {
+boots &lt;- sample_frac(Mortality, replace=T)
+fits &lt;- lm(dead_c ~ dose_c*Cultivar, data=boots)
+coef(fits)
+})
+samps %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept)   dose_c CultivarFUJI CultivarGala CultivarGRANNY
+## 1    36.19374 3.479058     43.97793     82.50691       48.13256
+##   CultivarRed Delicious CultivarROYAL CultivarSplendour dose_c:CultivarFUJI
+## 1              51.75646      58.83533          134.2798            5.053606
+##   dose_c:CultivarGala dose_c:CultivarGRANNY dose_c:CultivarRed Delicious
+## 1                  NA              6.513312                     7.417462
+##   dose_c:CultivarROYAL dose_c:CultivarSplendour
+## 1                   NA                       NA</code></pre>
+<div id="after-rerunning-the-regression-model-with-the-bootstrapped-standard-errors-im-able-to-see-slight-variations-in-standard-errors-that-resemble-mostly-the-regular-ses.-it-seems-for-each-category-and-the-interactions-the-standard-errors-are-only-slightly-lower-or-higher-to-those-of-the-regular-ses-but-dont-seem-to-have-much-resemblance-with-the-robust-ses." class="section level5">
+<h5>After rerunning the regression model with the bootstrapped standard errors, I'm able to see slight variations in standard errors that resemble mostly the regular SEs. It seems for each category and the interactions, the standard errors are only slightly lower or higher to those of the regular SEs but don't seem to have much resemblance with the robust SEs.</h5>
+<hr />
+</div>
+</div>
+<div id="logistic-regression-model" class="section level2">
+<h2>5. Logistic Regression Model</h2>
+<pre class="r"><code>fit1&lt;-glm(year~dose_c+dead_c,data=Mortality,family=binomial(link=&quot;logit&quot;))
+coeftest(fit1)</code></pre>
+<pre><code>## 
+## z test of coefficients:
+## 
+##               Estimate Std. Error z value  Pr(&gt;|z|)    
+## (Intercept)  0.5357130  0.2768487  1.9350  0.052986 .  
+## dose_c       0.1393564  0.0500476  2.7845  0.005361 ** 
+## dead_c      -0.0079703  0.0018333 -4.3476 1.376e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>exp(coef(fit1))</code></pre>
+<pre><code>## (Intercept)      dose_c      dead_c 
+##   1.7086661   1.1495337   0.9920614</code></pre>
+<pre class="r"><code>1-0.9920614</code></pre>
+<pre><code>## [1] 0.0079386</code></pre>
+<pre class="r"><code>prob&lt;-predict(fit1,type=&quot;response&quot;)
+pred&lt;-ifelse(prob&gt;.5,1,0)
+table(truth=Mortality$year, prediction=pred)%&gt;%addmargins</code></pre>
+<pre><code>##      prediction
+## truth  0  1 Sum
+##   0   20 14  34
+##   1    2 63  65
+##   Sum 22 77  99</code></pre>
+<pre class="r"><code>(20+63)/99</code></pre>
+<pre><code>## [1] 0.8383838</code></pre>
+<pre class="r"><code>63/65</code></pre>
+<pre><code>## [1] 0.9692308</code></pre>
+<pre class="r"><code>20/34</code></pre>
+<pre><code>## [1] 0.5882353</code></pre>
+<pre class="r"><code>63/77</code></pre>
+<pre><code>## [1] 0.8181818</code></pre>
+<pre class="r"><code>library(plotROC)
+ROCplot&lt;-ggplot(Mortality)+geom_roc(aes(d=year,m=pred), n.cuts=0)
+ROCplot</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group      AUC
+## 1     1    -1 0.778733</code></pre>
+<pre class="r"><code>Mortality$logit &lt;- predict(fit1)
+Mortality &lt;- Mortality %&gt;% mutate(yearss = recode(year, &quot;Year1&quot;, &quot;Year2&quot;))
+ggplot(Mortality,aes(logit, fill=yearss))+geom_density(alpha=.3)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<div id="after-running-the-coeftest-and-exponentiating-the-estimates-we-can-see-that-the-odds-of-the-year-being-1988-designated-1-increases-by-14.95-for-every-one-unit-increase-in-the-dosage.-on-the-other-hand-the-odds-of-the-year-being-1988-decreases-by-0.79-for-every-one-unit-increase-in-the-number-of-dead-insects." class="section level5">
+<h5>After running the coeftest and exponentiating the estimates, we can see that the odds of the year being 1988 (designated 1) increases by 14.95% for every one unit increase in the dosage. On the other hand, the odds of the year being 1988 decreases by 0.79% for every one unit increase in the number of dead insects.</h5>
+</div>
+<div id="next-a-confusion-matrix-was-generated-to-calculate-the-accuracy-sensitivity-specificity-and-precision.-the-overall-accuracy-proportion-of-correctly-classified-year-is-0.84.-the-proportion-of-correctly-classified-1988-cases-tpr-is-0.969.-the-proportion-of-correctly-classified-1989-cases-tnr-is-0.588.-the-proportion-of-predicted-1988-cases-that-were-actually-correct-precision-is-0.818.-lastly-we-ran-an-roc-plot-and-calculated-the-auc-to-be-0.7787.-this-value-summarizes-the-trade-off-between-sensitivity-and-specificty-and-our-value-means-our-auc-was-fair." class="section level5">
+<h5>Next, a confusion matrix was generated to calculate the accuracy, sensitivity, specificity, and precision. The overall accuracy (proportion of correctly classified year) is 0.84. The proportion of correctly classified 1988 cases (TPR) is 0.969. The proportion of correctly classified 1989 cases (TNR) is 0.588. The proportion of predicted 1988 cases that were actually correct (precision) is 0.818. Lastly, we ran an ROC plot and calculated the AUC to be 0.7787. This value summarizes the trade-off between sensitivity and specificty and our value means our AUC was fair.</h5>
+</div>
+<div id="finally-we-generated-a-density-plot-of-the-log-odds-using-ggplot.-i-had-to-create-a-new-column-in-my-mortality-dataset-that-includes-the-log-odds-values-of-the-predictions-and-named-it-logit.-i-added-another-column-to-mortality-that-changed-the-binary-year-column-to-a-categorical-one-using-mutate-because-the-plot-would-not-generate-if-i-used-the-binary-variable-for-some-reason.-unfortunately-this-only-assigned-my-1988-years-assigned-binary-1-to-a-categorical-value-year1-and-left-1989-as-na.-regardless-it-still-generated-a-density-plot-where-year1-represents-1988-and-na-represents-1989.-there-is-significant-overlap-especially-with-the-year-1989-being-counted-as-1988-as-you-can-tell-from-the-gray-curve-overlapping-past-0-towards-year1." class="section level5">
+<h5>Finally, we generated a density plot of the log-odds using ggplot. I had to create a new column in my Mortality dataset that includes the log-odds values of the predictions and named it &quot;logit&quot;. I added another column to Mortality that changed the binary year column to a categorical one using mutate because the plot would not generate if I used the binary variable for some reason. Unfortunately, this only assigned my 1988 years (assigned binary 1) to a categorical value &quot;Year1&quot; and left 1989 as NA. Regardless, it still generated a density plot where &quot;Year1&quot; represents 1988 and &quot;NA&quot; represents 1989. There is significant overlap especially with the year 1989 being counted as 1988 as you can tell from the gray curve overlapping past 0 towards Year1.</h5>
+<hr />
+</div>
+</div>
+<div id="logistic-regression-for-rest-of-variables" class="section level2">
+<h2>6. Logistic Regression for rest of variables</h2>
+<pre class="r"><code>fit2&lt;-glm(year~tot+cm+Cultivar+dose+dead,data=Mortality,family=binomial(link=&quot;logit&quot;))
+prob2&lt;-predict(fit2,type=&quot;response&quot;)
+pred2&lt;-ifelse(prob2&gt;.5,1,0)
+table(truth=Mortality$year, prediction=pred2)%&gt;%addmargins</code></pre>
+<pre><code>##      prediction
+## truth  0  1 Sum
+##   0   33  1  34
+##   1    1 64  65
+##   Sum 34 65  99</code></pre>
+<pre class="r"><code>ROCplot2&lt;-ggplot(Mortality)+geom_roc(aes(d=year,m=pred2), n.cuts=0)
+ROCplot2</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>calc_auc(ROCplot2)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.9776018</code></pre>
+<pre class="r"><code>(33+64)/99</code></pre>
+<pre><code>## [1] 0.979798</code></pre>
+<pre class="r"><code>64/65</code></pre>
+<pre><code>## [1] 0.9846154</code></pre>
+<pre class="r"><code>33/34</code></pre>
+<pre><code>## [1] 0.9705882</code></pre>
+<pre class="r"><code>64/65</code></pre>
+<pre><code>## [1] 0.9846154</code></pre>
+<pre class="r"><code>class_diag &lt;- function(probs,truth){
+  tab&lt;-table(factor(probs&gt;.5,levels=c(&quot;FALSE&quot;,&quot;TRUE&quot;)),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  f1=2*(sens*ppv)/(sens+ppv)
+  if(is.numeric(truth)==FALSE &amp; is.logical(truth)==FALSE) truth&lt;-as.numeric(truth)-1
+  ord&lt;-order(probs, decreasing=TRUE)
+  probs &lt;- probs[ord]; truth &lt;- truth[ord]
+  TPR=cumsum(truth)/max(1,sum(truth))
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  dup&lt;-c(probs[-1]&gt;=probs[-length(probs)], FALSE)
+  TPR&lt;-c(0,TPR[!dup],1); FPR&lt;-c(0,FPR[!dup],1)
+  n &lt;- length(TPR)
+  auc&lt;- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+  data.frame(acc,sens,spec,ppv,f1,auc) 
+}
+  
+set.seed(1234)
+k=10
+data&lt;-Mortality[sample(nrow(Mortality)),]
+folds&lt;-cut(seq(1:nrow(Mortality)),breaks=k,labels=F)
+diags&lt;-NULL
+for(i in 1:k){
+  train&lt;-data[folds!=i,]
+  test&lt;-data[folds==i,]
+  truth&lt;-test$year 
+  fit5&lt;-glm(year~tot+cm+Cultivar+dose+dead,data=train,family=&quot;binomial&quot;)
+  probs&lt;-predict(fit,newdata = test,type=&quot;response&quot;)
+  diags&lt;-rbind(diags,class_diag(probs,truth))
+}
+summarize_all(diags,mean)</code></pre>
+<pre><code>##         acc      sens  spec   ppv  f1       auc
+## 1 0.2922222 0.2503968 0.385 0.465 NaN 0.3140298</code></pre>
+<pre class="r"><code>test &lt;-  Mortality %&gt;% select(-dose_c, -dead_c, -logit, -yearss)
+library(glmnet)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## Loaded glmnet 4.0-2</code></pre>
+<pre class="r"><code>y&lt;-as.matrix(test$year)
+x&lt;-model.matrix(year~.,data=test)[,-1]
+cv&lt;-cv.glmnet(x,y,family=&quot;binomial&quot;)
+lasso&lt;-glmnet(x,y,family=&quot;binomial&quot;,lambda=cv$lambda.1se)
+coef(lasso)</code></pre>
+<pre><code>## 11 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                                  s0
+## (Intercept)            12.503096144
+## dose                    .          
+## tot                    -0.007066206
+## dead                    .          
+## cm                    -15.503516855
+## CultivarFUJI            .          
+## CultivarGala           -9.282004532
+## CultivarGRANNY          .          
+## CultivarRed Delicious  -4.600854169
+## CultivarROYAL           1.655059758
+## CultivarSplendour      -6.468198805</code></pre>
+<pre class="r"><code>set.seed(1234)
+k=10
+data1 &lt;- test %&gt;% sample_frac
+folds1 &lt;- ntile(1:nrow(data1),n=10)
+diags1&lt;-NULL
+for(i in 1:k){
+  train1 &lt;- data1[folds!=i,]
+  test1 &lt;- data1[folds==i,] 
+  truth1 &lt;- test1$year 
+  fit12 &lt;- glm(year~tot+cm+Cultivar,
+  data=train1, family=&quot;binomial&quot;)
+  probs1 &lt;- predict(fit12, newdata=test1, type=&quot;response&quot;)
+  diags1&lt;-rbind(diags1,class_diag(probs1,truth1))
+}
+diags1%&gt;%summarize_all(mean)</code></pre>
+<pre><code>##    acc      sens      spec       ppv        f1       auc
+## 1 0.96 0.9777778 0.9466667 0.9708333 0.9717424 0.9944444</code></pre>
+<div id="for-this-section-we-ran-a-logisitic-regression-for-the-rest-of-our-variables-tot-cm-cultivar-dose-and-dead-fit-the-model-and-computed-in-sample-classification-diagnostics.-we-calculated-our-accuracy-to-be-0.9798-which-means-our-predictions-correctly-classified-about-98-of-our-cases-either-1988-or-1989.-our-sensitivity-was-0.9846-so-our-model-correctly-classified-about-98.5-of-1988-cases-correctly.-our-specificity-was-0.9706-so-our-model-correctly-classified-97-of-1989-cases-correctly.-our-precision-was-0.9846-so-our-model-found-a-proportion-of-about-98.5-classified-as-1988-that-actually-were-from-that-year.-lastly-our-auc-was-calculated-as-0.9776-which-is-a-great-trade-off-between-sensitivity-and-specificity." class="section level5">
+<h5>For this section, we ran a logisitic regression for the rest of our variables (tot, cm, Cultivar, dose, and dead), fit the model, and computed in-sample classification diagnostics. We calculated our accuracy to be 0.9798, which means our predictions correctly classified about 98% of our cases (either 1988 or 1989). Our sensitivity was 0.9846, so our model correctly classified about 98.5% of 1988 cases correctly. Our specificity was 0.9706, so our model correctly classified 97% of 1989 cases correctly. Our precision was 0.9846, so our model found a proportion of about 98.5% classified as 1988 that actually were from that year. Lastly, our AUC was calculated as 0.9776 which is a great trade-off between sensitivity and specificity.</h5>
+</div>
+<div id="after-running-the-10-fold-cross-validation-test-with-the-same-model-we-get-very-different-values-for-all-of-our-classification-diagnositics-compared-to-our-in-sample-metrics.-the-accuracy-sensitivity-specificity-and-precision-for-this-test-are-all-lower-than-those-of-the-in-sample-test-we-did-before.-in-addition-the-auc-is-a-lot-lower-at-0.314-which-is-a-very-bad-trade-off-between-sensitiviy-and-specificity." class="section level5">
+<h5>After running the 10-fold Cross Validation test with the same model, we get very different values for all of our classification diagnositics compared to our in-sample metrics. The accuracy, sensitivity, specificity, and precision for this test are all lower than those of the in-sample test we did before. In addition, the AUC is a lot lower at 0.314 which is a very bad trade-off between sensitiviy and specificity.</h5>
+</div>
+<div id="after-performing-lasso-on-the-same-model-we-were-able-to-retain-the-variables-tot-cm-cultivargala-cultivarred-delicious-cultivarroyal-and-cultivarsplendour.-this-means-that-these-variables-are-the-most-predictive-variables-in-our-model." class="section level5">
+<h5>After performing LASSO on the same model, we were able to retain the variables tot, cm, CultivarGala, CultivarRed Delicious, CultivarROYAL, and CultivarSplendour. This means that these variables are the most predictive variables in our model.</h5>
+</div>
+<div id="after-running-the-10-fold-cv-on-only-the-lasso-selected-variables-we-get-values-for-all-classification-diagnostics-only-slightly-less-than-the-in-sample-test-and-a-lot-better-than-our-other-out-sample-testt-that-we-did-with-all-the-other-variables.-our-auc-on-the-other-hand-is-the-best-weve-seen-so-far-at-0.994.-this-value-means-we-have-a-great-trade-off-between-specificity-and-sensitivity." class="section level5">
+<h5>After running the 10-fold CV on only the lasso selected variables, we get values for all classification diagnostics only slightly less than the in-sample test and a lot better than our other out-sample testt that we did with all the other variables. Our AUC, on the other hand, is the best we've seen so far at 0.994. This value means we have a great trade-off between specificity and sensitivity.</h5>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

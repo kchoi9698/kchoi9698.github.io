@@ -1,0 +1,119 @@
+---
+title: "Exploratory Data Analysis"
+author: "Kenny Choi"
+date: "2020-12-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+my_movies <- read_excel("Computational Biology Project 1 Movies.xlsx")
+my_pops <- read_excel("Computational Biology Project 1 Pops.xlsx")
+```
+
+## Introduction
+
+##### For this project, I chose to work with the top 50 highest grossing movies of all time and how that relates to the number of unique Funko Pop vinyl figures that were created for each movie. The first dataset contains the titles of the top 50 movies, their worldwide gross earnings, and the years the movies came out. The second dataset contains the titles of the movies (meant to be the common variable between the two datasets), the number of Funko Pop figures created for that specific movie, the category of franchise they have been labled into by the Funko company, and the most expensive Pop figure I could find in that line. These two datasets will share the common variable of "Title" while the four numerical variables will include "Worldwide Gross", "Year", "Number of Pops", and "Most Expensive". 
+##### These two datasets were acquired from multiple sources. The top 50 grossing movies were from Wikipedia while the number of distinct Pops for each movie and the most expensive Pop were acquired by researching on Pop checklists on various websites detailing the different types of Pops that were created. These datasets were interesting to me because I own a few Pops of my own and I enjoy watching movies. In addition, the movie industry relies heavely on toy sales as income so I chose a toy line that seemed to garner the most attention for each movie, adding on to their total revenue. I expect there to be a higher number of Pops depending on the type of franchise each movie belongs to. For instance, a Marvel or Star Wars movie should have a very high number of distinct Funko Pops while standalone movies such as Avatar should not have a lot of Pops if any. 
+
+---
+
+## Tidying/Rearranging Datasets
+
+```{R}
+library(tidyr)
+untidy_movies <- my_movies %>% pivot_wider(names_from = "Year", values_from = "Worldwide.Gross")
+untidy_movies
+untidy_movies %>% pivot_longer(!Title, names_to = "Year", values_to = "Worldwide.Gross")
+
+
+untidy_pops <- my_pops %>% pivot_wider(names_from = "Franchise", values_from = "Number.of.Pops")
+untidy_pops
+untidy_pops %>% pivot_longer(!Title, names_to = "Franchise", values_to = "Number.of.Pops")
+```
+  Both the datasets, my_movies and my_pops, are already tidy (every observation has its own row and every variable its own column), so I made them untidy with pivot_wider and made them tidy with pivot_longer. The names_from and values_from in the pivot_wider were assigned variables from the original dataset in order to create more columns that used to be observations from the first variable. Having observations as columns included many unnecessary columns that now have rows from the second variable. In order to rectify this, pivot_longer was used to give the observations that were made into columns back into rows under a variable name while the rows that filled up those extraneous columns were put under its own column with its own variable. This made less columns but more rows, hence it became longer.
+
+## Joining/Merging
+
+```{R}
+library(dplyr)
+joined_data <- my_movies %>% left_join(my_pops)
+joined_data
+```
+In order to combine my two datasets, I used a left_join since conveniently the variable I wanted to join by was "Title" which is the left-most column on both datasets. By using the left_join, all rows from the first dataset were retained (my_movies) while rows with matches from the second dataset (my_pops) were added. Fortunately, all 50 observations were shared between the two datasets and thus none were dropped. Therefore, the number of observations remained the same while the number of variables went from 3 to 5 since two more new variables were added after the join ("Number of Pops" and "Franchise").
+
+
+## Wrangling
+
+```{R}
+joined_data %>% filter(Franchise == "Marvel" & Number.of.Pops >= 20)
+joined_data %>% filter(Worldwide.Gross > 1000000 & between(Year, 2010, 2020)) %>%
+  arrange(desc(Year)) %>% select(-Number.of.Pops)
+
+joined_data %>% mutate(percent.change = (Worldwide.Gross - lead(Worldwide.Gross))/ lead(Worldwide.Gross)) %>% select(-Number.of.Pops, -Franchise)
+
+joined_data %>% summarize(mean_gross = mean(Worldwide.Gross), sd_gross = sd(Worldwide.Gross), var_gross = var(Worldwide.Gross), IQR_gross = IQR(Worldwide.Gross), mad_gross = mad(Worldwide.Gross), min_gross = min(Worldwide.Gross), max_gross = max(Worldwide.Gross), median_gross = median(Worldwide.Gross), n_rows = n(), n_franchises = n_distinct(Franchise))
+
+joined_data %>% summarize(mean_pops = mean(Number.of.Pops), sd_pops = sd(Number.of.Pops), var_pops = var(Number.of.Pops), IQR_pops = IQR(Number.of.Pops), mad_pops = mad(Number.of.Pops), min_pops = min(Number.of.Pops), max_pops = max(Number.of.Pops), median_pops = median(Number.of.Pops))
+
+joined_data %>% summarize(mean_expensive = mean(Most.Expensive, na.rm=T), sd_expensive = sd(Most.Expensive, na.rm=T), var_expensive = var(Most.Expensive, na.rm=T), IQR_expensive = IQR(Most.Expensive, na.rm=T), mad_expensive = mad(Most.Expensive, na.rm=T), min_expensive = min(Most.Expensive, na.rm=T), max_expensive = max(Most.Expensive, na.rm=T), median_expensive = median(Most.Expensive, na.rm=T))
+
+joined_data %>% group_by(Franchise) %>% summarize(mean_gross = mean(Worldwide.Gross), sd_gross = sd(Worldwide.Gross), max_gross = max(Worldwide.Gross), min_gross = min(Worldwide.Gross), median_gross = median(Worldwide.Gross))
+
+joined_data %>% group_by(Franchise, Year) %>% summarize(mean_pops = mean(Number.of.Pops), max_pops = max(Number.of.Pops))
+
+library(tibble)
+untidy_cor <- joined_data %>% select_if(is.numeric) %>% cor(use="pair")
+cor_data <- untidy_cor %>% as.data.frame %>% rownames_to_column("var1") %>% 
+  pivot_longer(-1, names_to="var2", values_to = "correlation")
+cor_data
+```
+  First I created two filters: one where I wanted to only look at Marvel movies that had more than 20 Funko Pop figures created for that specific movie and one where I wanted to only look at recent movies from the past decade where the movie grossed more than $1,000,000 worldwide. The second filtered line also includes an arrange function which organized the observations by year in a descending order (most recent movies first). In addition, we only want data pertaining to the actual movies themselves, thus I selected out Number.of.Pops so that only the four columns that describe the movies remained (note: Franchise specifically pertains to the Funko Pop franchise line the movie belongs to, but is useful to describe the movie franchise as well). Next, I wanted to see the percent change ascending by comparing how much more the higher-grossing movie earned compared to the movie right underneath it in the rank. This was achieved with mutate in order to add another column titled "percent.change" and I also removed the two columns pertaining to Pops in order to focus solely on the movie gross incomes.
+  
+  The next three lines of code focuses on summary statistics using the function summarize() and the unique functions inside summarize (mean, sd, var, IQR, mad, min, max, median, n(), and n_distinct). Var measures how far the values are from the mean, IQR finds the interquartile range, mad measures the median absolute deviation from the median, n() measure the total number of rows, and n_distinct() measures the total number of distinct rows. These were done on the three numerical variables Worldwide.Gross, Number.of.Pops, and Most.Expensive. The Year variable was not included since taking the means, sd, and so on did not seem to make sense with the years the movies came out. For the Most.Expensive variable, na.rm=T was implemented since there were NA values within the variable while the other two numerical variables did not. The average number of Pops produced for a movie was 15 while the average of all the most expensive Pops for each movie was $331. After this, I used group_by in order to subset the Franchise variable and group them back together to return the mean and standard deviations for the Worldwide Gross. Following that, two categorical variables were simultaneously grouped (Franchise and Year) in order for us to group the mean and max values of Number of Pops based on these two categorical variables. Lastly, a correlation matrix was created which compared all numerical variables to all the other numeric variables. There seemed to be a high correlation between the worldwide gross and the number of pops (about 32%) and a negative correlation between worldwide gross and most expensive pop in the line (about -10%). 
+  
+
+## Visualizing
+
+```{R}
+library(ggplot2)
+cor_data %>% ggplot(aes(var1, var2, fill=correlation)) + geom_tile() + geom_text(aes(label=round(correlation,2))) + xlab("") + ylab("") + coord_fixed() + scale_fill_gradient2(low="red", mid="white", high="blue") + theme(axis.text.x = element_text(angle = 90, vjust=0.5, hjust=1))
+
+ggplot(joined_data, aes(Number.of.Pops, Worldwide.Gross)) + geom_point(aes(color=Franchise)) + geom_smooth(method="lm") + ggtitle("Worldwide Gross vs. Number of Pops by Franchise") + xlab("Number of Pops") + ylab("Worldwide Gross ($)")
+
+ggplot(joined_data, aes(x=Year, y=Most.Expensive, fill=Franchise)) + geom_bar(stat="summary", position="dodge") + scale_x_continuous(breaks = seq(1990,2020,5)) + scale_y_continuous(breaks=seq(0, 5000, 500)) + ggtitle("Most Expensive Pops per year by Franchise") + ylab("Most Expensive Pops ($)")
+```
+  Using the correlation data from the previous section, I generated a correlation heat map that shows the values of correlation for each of the numeric variables in the dataset. The diagonal going from the bottome left to the top right shows the correlation of the variables to themselves, so it makes sense that they would return a correlation of 1. From this map, we can see that there are slightly positive correlations between worldwide gross and number of pops, year and number of pops, and number of pops and most expensive. These relationships were expected as a movie that earns a lot more money (meaning that it is very popular) will have a lot more Funko Pop figures made for it. The Funko company was founded fairly recently (1998) and it did not start making Pops until 2010, so the year the movie came out correlates with the number of pops made for the movie. The reason certain movies like the original Lion King (which was released in 1994) has Pops is because the company decided to make iconic Disney Pops from the past. There is a slightly positive relationship between the number of Pops and the most expensive Pop's price from each movie. The price of a Pop figure depends on various factors such as how long ago it was made, the rarity of it, etc. Therefore it is hard to predict whether a certain movie would have a very high priced Pop figure. Our heat map tells us that a movie that has a higher number of Pop figures made for it has a slightly positive relationship with having a very expensive Pop. There is a negative relationship between the year the movie came out and the movie's most expensive Pop as well as the worldwide gross and the most expensive Pop. As mentioned before, it is hard to predict how high in price a Pop figure will go and thus it is not surprising that there are negative correlations for these variables.
+  
+  The second plot is a scatterplot that uses the ggplot function. The variable used on the x-axis is Number of Pops while that of the y-axis is Worldwide Gross. The colors of the dots represent the franchise that the movies belong to. From this data, we can see that there is an overall positive relationship between these two variables with slight variance. This makes sense since, as mentioned before, the more a movie earns worldwide the higher the likelihood that the Funko company will produce more Pop figures for that movie. We can also see that the Marvel, Star Wars, and Movie categories have the highest worldwide gross and highest number of Pops produced. There is an observation that had a high worldwide gross but no Pops created for the movie. This was for the movie "Avatar" and this is likely because the Funko company never received property rights to produce toys from this movie from the movie studio. 
+  
+  The third plot is a bar graph that uses stat="summary" to compare the year the movie came out with the most expensive pop value from that movie. Although there is no discernible relationship between these two variables, we can see how varied the most expensive Pops can be from when the movie was released. The Star Wars bar in 1999 had the most expensive Pop value (which is the holographic Darth Maul). There are a lot of factors that shift the value of a Pop figure from year to year. This includes quantity of figures made, exclusivity of the figure, and how old the figure is. If we take the holographic Darth Maul figure for example, it was released in 2012 as an exclusive for San Diego Comic Con with only 480 figures ever produced. In addition, we can see that the most expensive Pops are usually from the Star Wars franchise. Perhaps this is due to the immense popularity of these movies and the frequent production of only a few number of certain figures in this franchise. While Marvel movies are also immensely popular in recent years, there have not been as many over-the-top expensive Pops for this line. 
+  
+## Dimensionality Reduction
+
+```{R}
+library(cluster)
+library(GGally)
+library(plotly)
+clustdata <- joined_data %>% select(Worldwide.Gross, Number.of.Pops, Most.Expensive)
+pam1 <- clustdata %>% scale %>% pam(2)
+pam1
+pamclust <- clustdata %>% mutate(cluster=as.factor(pam1$clustering))
+
+ggpairs(pamclust, columns=1:3, aes(color=cluster))
+plot(pam1,which=2) 
+sil_width<-vector()
+for(i in 2:10){
+  pam_fit <- pam(clustdata, diss = TRUE, k = i)
+  sil_width[i] <- pam_fit$silinfo$avg.width
+}
+ggplot()+geom_line(aes(x=1:10,y=sil_width))+scale_x_continuous(name="k",breaks=1:10)
+pamclust%>%plot_ly(x= ~Number.of.Pops, y = ~Worldwide.Gross, z = ~Most.Expensive, color= ~cluster,
+                type = "scatter3d", mode = "markers") %>%
+  layout(autosize = F, width = 900, height = 400)
+```
+
+  For this section, I first had to take my joined dataset and select out only the numerical variables and create a new dataset with these columns only. Next, I used the PAM function with this new dataset which I scaled in order to process my numeric variables. The PAM function was what I used to run a cluster analysis for my dataset. The number of clusters I used is 2 because initially I did not know how many clusters would give me the best fit for my dataset but using the silhouette code later on, I found that using 2 clusters was the best option.  Before moving on, I created another dataset that took clustdata, which only had my numeric variables, and added another column with mutate that contained the cluster assignments for each observation. This will be useful to color the points when we create the ggplot. I then decided to visualize all pairwise combinations with ggpairs. There are only three numerical variables so only three columns are seen. We can see the correlations and the clusters using this visual. The colors in this visual are assigned to the cluster groupings for the data. I then interpreted my average silhouette width by plotting it and I found that it was 0.59. This value means that a reasonable structure has been found. This test was used to evaluate the goodness-of-fit of our dataset. Following that, I had put in the code to determine how many clusters would best fit my dataset with the silhouette method. This tells me that 2 clusters is the best since it had the highest silhouette width. This code starts off with an empty vector which I then followed with a "for" function that takes the information from the silhouette widths. The ggplot code is then used to plot and the x-axis was scaled from 1 to 10. 
+  
+  Finally, I took the three numerical variables and visualized the clusters with the plotly tool. This gave a 3D rendition of the three variables on the x, y, and z planes. The three numerical variables are Worldwide.Gross, Number.of.Pops, and Most.Expensive. There are only 2 clusters in the visual since that was what the silhouette test gave as the most fit number of clusters. The cluster variable was assigned the color of the dots. Interpreting the clusters, we can see that the two clusters are divided into those at the lower end of all variables and those at the higher end. In other words, the first cluster took the movies that grossed the least worldwide, had the fewest number of Pops made for it, and had the smallest value for its most expensive Pop. The second cluster is a little harder to explain. Most of the points seem to indicate that these movies grossed the most and had the most number of Pops but did not have very expensive Pops. The most likely reason is that we have seen how there is a negative correlation between worldwide gross and most expensive Pop while there is only a slightly positive correlation between number of pops and most expensive. So there is much ambiguity when it comes to comparing our values while including the most expensive Pop's value since this variable does not seem to correlate with any other variable. Nevertheless, we see that the two clusters divided our dataset into the lower half of grossing movies/number of Pops and the higher half of grossing movies/number of Pops. 

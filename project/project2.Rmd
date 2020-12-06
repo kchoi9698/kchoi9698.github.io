@@ -1,0 +1,228 @@
+---
+title: "Project 2"
+author: "Kenny Choi"
+date: "2020-12-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readxl)
+Mortality <- read_excel("Dose-Mortality Data.xlsx")
+Mortality <- Mortality %>% select(-...1, -pobs, -ct, -gp, -numcm)
+Mortality$year <- ifelse(Mortality$year == '1988', 1,0)
+```
+
+## Introduction
+
+##### For this project, I have chosen to work with the Dose-Mortality dataset built into R Studio. This dataset givese the dose-mortality for fumagation of codling moth from an injection of methyl bromide. Of the 10 different variables, I will be focusing on dose (of injected methyl bromide in gm/cubic meter), tot (total number of moths), dead (number of dead moths), cm (control mortality at dose 0), Cultivar (factor of levels of different types of the dose), and year (which will be manipulated to be binary since it only includes 1988 and 1989). There will be a total of 99 observations and only the six variables I mentioned above. The numeric variables will be dose, tot, dead, and cm while year will be converted to binary. Cultivar will serve as our one categorical variable. 
+
+---
+
+## 1. MANOVA Test
+
+```{R}
+man1 <- manova(cbind(dose, dead)~Cultivar, data=Mortality)
+summary(man1)
+
+summary.aov(man1)
+
+Mortality%>%group_by(Cultivar)%>%summarize(mean(dose),mean(dead))
+
+pairwise.t.test(Mortality$dose, Mortality$Cultivar, p.adj="none")
+pairwise.t.test(Mortality$dead, Mortality$Cultivar, p.adj="none")
+
+0.05/45
+```
+
+##### We conducted a one-way MANOVA in order to determine the effect of Cultivar type (BRAEBURN, FUJI, Gala, GRANNY, Red, Delicious, ROYAL) on our two dependent variables (dose of injection and number of dead insects). For our MANOVA assumptions, we can assume that the observations are random samples and independent from one another. It is not certain whether the dependent variables met the ANOVA assumption of normal distribution within each group and the MANOVA assumption of multivariate normality, but we will proceed with caution. Homogeneity of within-group covariance matrices and linear relationships among the dependent variables are also assumed. We do not see any extreme outliers and we assume there is no correlation within the dependent variables. 
+##### Significant differences were found between the dose and death number for at least one of the dependent variables, Pillai = 0.48, pseduo F (12, 184) = 4.83, p < 0.0001. The Bonferroni method was used to control Type I error rates (0.0011). Univariate ANOVAs and post-hoc analysis was also confirmed. Among our pairwise t tests, only Splendour showed significance with all the other Cultivar types when comparing the number of dead insects. 
+
+---
+
+## 2. Randomization Test
+
+```{R}
+summary(aov(dead~dose,data=Mortality))
+
+library(ggplot2)
+Fstat<-vector()
+for(i in 1:10000){
+g1<-rnorm(36)
+g2<-rnorm(36)
+g3<-rnorm(36)
+SSW<- sum((g1-mean(g1))^2+(g2-mean(g2))^2+(g3-mean(g3))^2)
+SSB<- 36*sum( (mean(c(g1,g2,g3))-c(mean(g1),mean(g2),mean(g3)))^2 )
+Fstat[i]<- (SSB/2)/(SSW/105)
+}
+data.frame(Fstat) %>%
+  ggplot(aes(Fstat)) + geom_histogram(aes(y=..density..))+
+  stat_function(fun=dt,args=list(df=35),geom="line")
+
+```
+
+##### Ho: The mean number of dead insects does not differ based on the mean dose received.
+##### HA: The mean number of dead insects does differ based on the mean dose received.
+##### According to these results, we can see that there is a significant difference in the mean of dead insects across the different number of mean dose given (F=39.25, df= (1,97), p < 0.001). We also created a plot to visualize the null distribution and the test statistic to see what the randomization test would look like if the mean number of dead insects were not dependent on the dose received. 
+
+---
+
+## 3. Linear Regression Model
+
+```{R}
+Mortality$dose_c <- Mortality$dose - mean(Mortality$dose)
+Mortality$dead_c <- Mortality$dead - mean(Mortality$dead)
+fit <- lm(dead_c ~ Cultivar*dose_c, data=Mortality)
+summary(fit)
+
+ggplot(Mortality, aes(dose,dead, color = Cultivar)) + geom_smooth(method = "lm", se = F, fullrange = T)+
+geom_point()+geom_vline(xintercept=0,lty=2)+geom_vline(xintercept=mean(Mortality$dose))
+
+resids<-fit$residuals
+fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, color='red')
+ggplot()+geom_histogram(aes(resids), bins=20)
+shapiro.test(resids) 
+
+library(sandwich)
+library(lmtest)
+bptest(fit)
+summary(fit)$coef[,1:2]
+coeftest(fit, vcov = vcovHC(fit))[,1:2]
+
+summary(fit)
+```
+
+##### Looking at the coefficient estimates, we can see that an intercept of -103.060 is the mean number of dead insects (centered) for the Braeburn category with average centered dosage. The Fuji and Granny categories with average dosage have predicted number of dead of 17.924 and 16.198 lower than the Braeburn category with average dose respectively. The Gala, Red Delicious, Royal, and Splendour categories with average dosage have predicted number of dead insects of 84.754, 56.820, 100.416, and 591.118 higher than the Braeburn category respectively. For every 1-unit increase in dosage, predicted number of dead goes up by 10.727 insects for the Braeburn category. Slopes of dose on number of dead for Fuji, Gala, Granny, Red Delicious, Royal, and Splendour are 5.746, 21.366, 5.862, 13.313, 11.914, and 32.889 greater than for Braeburn respectively. 
+##### After plotting the regression usign ggplot, we checked if our dataset met the assumptions of linearity, normality, and homoskedacity. Using the residuals from our fit dataset and graphing it, we can see that it fails the linearity and homoskedacity test because of its uneven scatter and tendency to the left of the graph. Graphing a histogram shows how our dataset might pass the normality test but upon running the Shapiro-Wilke test, we can see that is fails (p=0.0001).
+##### We then recomputed the regression results with robust standard errors. After running the bp test on our fitted data, we see a significant p-value less than 0.05, which means we reject our null hypothesis of homoskedacity (our dataset fails homoskedacity). Comparing the changes before and after the robust SEs, we see significant variation in standard errors so our conclusion that it fails homoskedacity is verified. 
+##### Finally, we can see after running summary(fit) that 0.6376 of the variation in the outcome can be explained by our model we conducted.
+
+---
+
+## 4. Bootstrapped Standard Error
+
+```{R}
+samps<-replicate(5000, {
+boots <- sample_frac(Mortality, replace=T)
+fits <- lm(dead_c ~ dose_c*Cultivar, data=boots)
+coef(fits)
+})
+samps %>% t %>% as.data.frame %>% summarize_all(sd)
+```
+
+##### After rerunning the regression model with the bootstrapped standard errors, I'm able to see slight variations in standard errors that resemble mostly the regular SEs. It seems for each category and the interactions, the standard errors are only slightly lower or higher to those of the regular SEs but don't seem to have much resemblance with the robust SEs. 
+
+---
+
+## 5. Logistic Regression Model
+
+```{R warning = F}
+fit1<-glm(year~dose_c+dead_c,data=Mortality,family=binomial(link="logit"))
+coeftest(fit1)
+exp(coef(fit1))
+1-0.9920614
+
+prob<-predict(fit1,type="response")
+pred<-ifelse(prob>.5,1,0)
+table(truth=Mortality$year, prediction=pred)%>%addmargins
+(20+63)/99
+63/65
+20/34
+63/77
+library(plotROC)
+ROCplot<-ggplot(Mortality)+geom_roc(aes(d=year,m=pred), n.cuts=0)
+ROCplot
+calc_auc(ROCplot)
+
+Mortality$logit <- predict(fit1)
+Mortality <- Mortality %>% mutate(yearss = recode(year, "Year1", "Year2"))
+ggplot(Mortality,aes(logit, fill=yearss))+geom_density(alpha=.3)
+```
+
+##### After running the coeftest and exponentiating the estimates, we can see that the odds of the year being 1988 (designated 1) increases by 14.95% for every one unit increase in the dosage. On the other hand, the odds of the year being 1988 decreases by 0.79% for every one unit increase in the number of dead insects. 
+##### Next, a confusion matrix was generated to calculate the accuracy, sensitivity, specificity, and precision. The overall accuracy (proportion of correctly classified year) is 0.84. The proportion of correctly classified 1988 cases (TPR) is 0.969. The proportion of correctly classified 1989 cases (TNR) is 0.588. The proportion of predicted 1988 cases that were actually correct (precision) is 0.818. Lastly, we ran an ROC plot and calculated the AUC to be 0.7787. This value summarizes the trade-off between sensitivity and specificty and our value means our AUC was fair.
+##### Finally, we generated a density plot of the log-odds using ggplot. I had to create a new column in my Mortality dataset that includes the log-odds values of the predictions and named it "logit". I added another column to Mortality that changed the binary year column to a categorical one using mutate because the plot would not generate if I used the binary variable for some reason. Unfortunately, this only assigned my 1988 years (assigned binary 1) to a categorical value "Year1" and left 1989 as NA. Regardless, it still generated a density plot where "Year1" represents 1988 and "NA" represents 1989. There is significant overlap especially with the year 1989 being counted as 1988 as you can tell from the gray curve overlapping past 0 towards Year1.
+
+---
+
+## 6. Logistic Regression for rest of variables
+
+```{R, warning = F}
+fit2<-glm(year~tot+cm+Cultivar+dose+dead,data=Mortality,family=binomial(link="logit"))
+prob2<-predict(fit2,type="response")
+pred2<-ifelse(prob2>.5,1,0)
+table(truth=Mortality$year, prediction=pred2)%>%addmargins
+ROCplot2<-ggplot(Mortality)+geom_roc(aes(d=year,m=pred2), n.cuts=0)
+ROCplot2
+calc_auc(ROCplot2)
+(33+64)/99
+64/65
+33/34
+64/65
+
+class_diag <- function(probs,truth){
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  f1=2*(sens*ppv)/(sens+ppv)
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  TPR=cumsum(truth)/max(1,sum(truth))
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+  data.frame(acc,sens,spec,ppv,f1,auc) 
+}
+  
+set.seed(1234)
+k=10
+data<-Mortality[sample(nrow(Mortality)),]
+folds<-cut(seq(1:nrow(Mortality)),breaks=k,labels=F)
+diags<-NULL
+for(i in 1:k){
+  train<-data[folds!=i,]
+  test<-data[folds==i,]
+  truth<-test$year 
+  fit5<-glm(year~tot+cm+Cultivar+dose+dead,data=train,family="binomial")
+  probs<-predict(fit,newdata = test,type="response")
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+summarize_all(diags,mean)
+
+test <-  Mortality %>% select(-dose_c, -dead_c, -logit, -yearss)
+library(glmnet)
+y<-as.matrix(test$year)
+x<-model.matrix(year~.,data=test)[,-1]
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+
+set.seed(1234)
+k=10
+data1 <- test %>% sample_frac
+folds1 <- ntile(1:nrow(data1),n=10)
+diags1<-NULL
+for(i in 1:k){
+  train1 <- data1[folds!=i,]
+  test1 <- data1[folds==i,] 
+  truth1 <- test1$year 
+  fit12 <- glm(year~tot+cm+Cultivar,
+  data=train1, family="binomial")
+  probs1 <- predict(fit12, newdata=test1, type="response")
+  diags1<-rbind(diags1,class_diag(probs1,truth1))
+}
+diags1%>%summarize_all(mean)
+
+```
+
+##### For this section, we ran a logisitic regression for the rest of our variables (tot, cm, Cultivar, dose, and dead), fit the model, and computed in-sample classification diagnostics. We calculated our accuracy to be 0.9798, which means our predictions correctly classified about 98% of our cases (either 1988 or 1989). Our sensitivity was 0.9846, so our model correctly classified about 98.5% of 1988 cases correctly. Our specificity was 0.9706, so our model correctly classified 97% of 1989 cases correctly. Our precision was 0.9846, so our model found a proportion of about 98.5% classified as 1988 that actually were from that year. Lastly, our AUC was calculated as 0.9776 which is a great trade-off between sensitivity and specificity. 
+##### After running the 10-fold Cross Validation test with the same model, we get very different values for all of our classification diagnositics compared to our in-sample metrics. The accuracy, sensitivity, specificity, and precision for this test are all lower than those of the in-sample test we did before. In addition, the AUC is a lot lower at 0.314 which is a very bad trade-off between sensitiviy and specificity. 
+##### After performing LASSO  on the same model, we were able to retain the variables tot, cm, CultivarGala, CultivarRed Delicious, CultivarROYAL, and CultivarSplendour. This means that these variables are the most predictive variables in our model. 
+##### After running the 10-fold CV on only the lasso selected variables, we get values for all classification diagnostics only slightly less than the in-sample test and a lot better than our other out-sample testt that we did with all the other variables. Our AUC, on the other hand, is the best we've seen so far at 0.994. This value means we have a great trade-off between specificity and sensitivity. 

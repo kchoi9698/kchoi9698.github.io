@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kun Choi</title>
+    <link>/</link>
+    <description>Recent content on Kun Choi</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exploratory Data Analysis</title>
+      <link>/project/project1/</link>
+      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Introduction For this project, I chose to work with the top 50 highest grossing movies of all time and how that relates to the number of unique Funko Pop vinyl figures that were created for each movie. The first dataset contains the titles of the top 50 movies, their worldwide gross earnings, and the years the movies came out. The second dataset contains the titles of the movies (meant to be the common variable between the two datasets), the number of Funko Pop figures created for that specific movie, the category of franchise they have been labled into by the Funko company, and the most expensive Pop figure I could find in that line.</description>
+    </item>
+    
+    <item>
+      <title>Project 2</title>
+      <link>/project/project2/</link>
+      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Introduction For this project, I have chosen to work with the Dose-Mortality dataset built into R Studio. This dataset givese the dose-mortality for fumagation of codling moth from an injection of methyl bromide. Of the 10 different variables, I will be focusing on dose (of injected methyl bromide in gm/cubic meter), tot (total number of moths), dead (number of dead moths), cm (control mortality at dose 0), Cultivar (factor of levels of different types of the dose), and year (which will be manipulated to be binary since it only includes 1988 and 1989).</description>
+    </item>
+    
+    <item>
+      <title>Test Post</title>
+      <link>/post/2020/12/06/test-post/</link>
+      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/06/test-post/</guid>
+      <description>  Blog Post 1 Link to project 1
+Link to google
+hist(quakes$depth) quakes &amp;lt;- quakes r.quakes.mag.mean() ## 4.6204000000000001   </description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/post/2015/07/23/hello-r-markdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/post/2015/07/23/hello-r-markdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description>  Check out some of my coding projects below:
+ Wrangling &amp;amp; Exploratory Data Analysis
+ Modeling, Inference, Prediction
+  -- </description>
+    </item>
+    
+    <item>
+      <title>Resume</title>
+      <link>/resume/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/resume/</guid>
+      <description>     </description>
+    </item>
+    
+  </channel>
+</rss>

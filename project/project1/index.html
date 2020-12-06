@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Kun Choi" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Exploratory Data Analysis</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Exploratory Data Analysis</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 6, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="../../rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+<script src="../../rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="../../rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="../../rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="../../rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="../../rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<div id="for-this-project-i-chose-to-work-with-the-top-50-highest-grossing-movies-of-all-time-and-how-that-relates-to-the-number-of-unique-funko-pop-vinyl-figures-that-were-created-for-each-movie.-the-first-dataset-contains-the-titles-of-the-top-50-movies-their-worldwide-gross-earnings-and-the-years-the-movies-came-out.-the-second-dataset-contains-the-titles-of-the-movies-meant-to-be-the-common-variable-between-the-two-datasets-the-number-of-funko-pop-figures-created-for-that-specific-movie-the-category-of-franchise-they-have-been-labled-into-by-the-funko-company-and-the-most-expensive-pop-figure-i-could-find-in-that-line.-these-two-datasets-will-share-the-common-variable-of-title-while-the-four-numerical-variables-will-include-worldwide-gross-year-number-of-pops-and-most-expensive." class="section level5">
+<h5>For this project, I chose to work with the top 50 highest grossing movies of all time and how that relates to the number of unique Funko Pop vinyl figures that were created for each movie. The first dataset contains the titles of the top 50 movies, their worldwide gross earnings, and the years the movies came out. The second dataset contains the titles of the movies (meant to be the common variable between the two datasets), the number of Funko Pop figures created for that specific movie, the category of franchise they have been labled into by the Funko company, and the most expensive Pop figure I could find in that line. These two datasets will share the common variable of &quot;Title&quot; while the four numerical variables will include &quot;Worldwide Gross&quot;, &quot;Year&quot;, &quot;Number of Pops&quot;, and &quot;Most Expensive&quot;.</h5>
+</div>
+<div id="these-two-datasets-were-acquired-from-multiple-sources.-the-top-50-grossing-movies-were-from-wikipedia-while-the-number-of-distinct-pops-for-each-movie-and-the-most-expensive-pop-were-acquired-by-researching-on-pop-checklists-on-various-websites-detailing-the-different-types-of-pops-that-were-created.-these-datasets-were-interesting-to-me-because-i-own-a-few-pops-of-my-own-and-i-enjoy-watching-movies.-in-addition-the-movie-industry-relies-heavely-on-toy-sales-as-income-so-i-chose-a-toy-line-that-seemed-to-garner-the-most-attention-for-each-movie-adding-on-to-their-total-revenue.-i-expect-there-to-be-a-higher-number-of-pops-depending-on-the-type-of-franchise-each-movie-belongs-to.-for-instance-a-marvel-or-star-wars-movie-should-have-a-very-high-number-of-distinct-funko-pops-while-standalone-movies-such-as-avatar-should-not-have-a-lot-of-pops-if-any." class="section level5">
+<h5>These two datasets were acquired from multiple sources. The top 50 grossing movies were from Wikipedia while the number of distinct Pops for each movie and the most expensive Pop were acquired by researching on Pop checklists on various websites detailing the different types of Pops that were created. These datasets were interesting to me because I own a few Pops of my own and I enjoy watching movies. In addition, the movie industry relies heavely on toy sales as income so I chose a toy line that seemed to garner the most attention for each movie, adding on to their total revenue. I expect there to be a higher number of Pops depending on the type of franchise each movie belongs to. For instance, a Marvel or Star Wars movie should have a very high number of distinct Funko Pops while standalone movies such as Avatar should not have a lot of Pops if any.</h5>
+<hr />
+</div>
+</div>
+<div id="tidyingrearranging-datasets" class="section level2">
+<h2>Tidying/Rearranging Datasets</h2>
+<pre class="r"><code>library(tidyr)
+untidy_movies &lt;- my_movies %&gt;% pivot_wider(names_from = &quot;Year&quot;, values_from = &quot;Worldwide.Gross&quot;)
+untidy_movies</code></pre>
+<pre><code>## # A tibble: 50 x 20
+##    Title  `2019`  `2009`  `1997`  `2015`  `2018`  `2012` `2011` `2017` `2013`
+##    &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Aven…  2.80e9 NA      NA      NA      NA      NA          NA     NA     NA
+##  2 Avat… NA       2.79e9 NA      NA      NA      NA          NA     NA     NA
+##  3 Tita… NA      NA       2.19e9 NA      NA      NA          NA     NA     NA
+##  4 Star… NA      NA      NA       2.07e9 NA      NA          NA     NA     NA
+##  5 Aven… NA      NA      NA      NA       2.05e9 NA          NA     NA     NA
+##  6 Jura… NA      NA      NA       1.67e9 NA      NA          NA     NA     NA
+##  7 The …  1.66e9 NA      NA      NA      NA      NA          NA     NA     NA
+##  8 The … NA      NA      NA      NA      NA       1.52e9     NA     NA     NA
+##  9 Furi… NA      NA      NA       1.52e9 NA      NA          NA     NA     NA
+## 10 Froz…  1.45e9 NA      NA      NA      NA      NA          NA     NA     NA
+## # … with 40 more rows, and 10 more variables: `2016` &lt;dbl&gt;, `2003` &lt;dbl&gt;,
+## #   `2014` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2006` &lt;dbl&gt;, `1993` &lt;dbl&gt;, `1999` &lt;dbl&gt;,
+## #   `2008` &lt;dbl&gt;, `2001` &lt;dbl&gt;, `1994` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>untidy_movies %&gt;% pivot_longer(!Title, names_to = &quot;Year&quot;, values_to = &quot;Worldwide.Gross&quot;)</code></pre>
+<pre><code>## # A tibble: 950 x 3
+##    Title             Year  Worldwide.Gross
+##    &lt;chr&gt;             &lt;chr&gt;           &lt;dbl&gt;
+##  1 Avengers: Endgame 2019       2797800564
+##  2 Avengers: Endgame 2009               NA
+##  3 Avengers: Endgame 1997               NA
+##  4 Avengers: Endgame 2015               NA
+##  5 Avengers: Endgame 2018               NA
+##  6 Avengers: Endgame 2012               NA
+##  7 Avengers: Endgame 2011               NA
+##  8 Avengers: Endgame 2017               NA
+##  9 Avengers: Endgame 2013               NA
+## 10 Avengers: Endgame 2016               NA
+## # … with 940 more rows</code></pre>
+<pre class="r"><code>untidy_pops &lt;- my_pops %&gt;% pivot_wider(names_from = &quot;Franchise&quot;, values_from = &quot;Number.of.Pops&quot;)
+untidy_pops</code></pre>
+<pre><code>## # A tibble: 50 x 9
+##    Title Most.Expensive Marvel  `NA` Movies `Star Wars` Disney `Harry Potter`
+##    &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;
+##  1 Aven…             49     49    NA     NA          NA     NA             NA
+##  2 Avat…              0     NA     0     NA          NA     NA             NA
+##  3 Tita…             26     NA    NA      3          NA     NA             NA
+##  4 Star…             42     NA    NA     NA          54     NA             NA
+##  5 Aven…            110     54    NA     NA          NA     NA             NA
+##  6 Jura…             50     NA    NA      7          NA     NA             NA
+##  7 The …             17     NA    NA     NA          NA     10             NA
+##  8 The …           2280     12    NA     NA          NA     NA             NA
+##  9 Furi…              0     NA     0     NA          NA     NA             NA
+## 10 Froz…             37     NA    NA     NA          NA     27             NA
+## # … with 40 more rows, and 1 more variable: Heroes &lt;dbl&gt;</code></pre>
+<pre class="r"><code>untidy_pops %&gt;% pivot_longer(!Title, names_to = &quot;Franchise&quot;, values_to = &quot;Number.of.Pops&quot;)</code></pre>
+<pre><code>## # A tibble: 400 x 3
+##    Title             Franchise      Number.of.Pops
+##    &lt;chr&gt;             &lt;chr&gt;                   &lt;dbl&gt;
+##  1 Avengers: Endgame Most.Expensive             49
+##  2 Avengers: Endgame Marvel                     49
+##  3 Avengers: Endgame NA                         NA
+##  4 Avengers: Endgame Movies                     NA
+##  5 Avengers: Endgame Star Wars                  NA
+##  6 Avengers: Endgame Disney                     NA
+##  7 Avengers: Endgame Harry Potter               NA
+##  8 Avengers: Endgame Heroes                     NA
+##  9 Avatar            Most.Expensive              0
+## 10 Avatar            Marvel                     NA
+## # … with 390 more rows</code></pre>
+<p>Both the datasets, my_movies and my_pops, are already tidy (every observation has its own row and every variable its own column), so I made them untidy with pivot_wider and made them tidy with pivot_longer. The names_from and values_from in the pivot_wider were assigned variables from the original dataset in order to create more columns that used to be observations from the first variable. Having observations as columns included many unnecessary columns that now have rows from the second variable. In order to rectify this, pivot_longer was used to give the observations that were made into columns back into rows under a variable name while the rows that filled up those extraneous columns were put under its own column with its own variable. This made less columns but more rows, hence it became longer.</p>
+</div>
+<div id="joiningmerging" class="section level2">
+<h2>Joining/Merging</h2>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>joined_data &lt;- my_movies %&gt;% left_join(my_pops)</code></pre>
+<pre><code>## Joining, by = &quot;Title&quot;</code></pre>
+<pre class="r"><code>joined_data</code></pre>
+<pre><code>## # A tibble: 50 x 6
+##    Title           Worldwide.Gross  Year Number.of.Pops Franchise Most.Expensive
+##    &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+##  1 Avengers: Endg…      2797800564  2019             49 Marvel                49
+##  2 Avatar               2790439000  2009              0 &lt;NA&gt;                   0
+##  3 Titanic              2194439542  1997              3 Movies                26
+##  4 Star Wars: The…      2068223624  2015             54 Star Wars             42
+##  5 Avengers: Infi…      2048359754  2018             54 Marvel               110
+##  6 Jurassic World       1671713208  2015              7 Movies                50
+##  7 The Lion King …      1656943394  2019             10 Disney                17
+##  8 The Avengers         1518812988  2012             12 Marvel              2280
+##  9 Furious 7            1516045911  2015              0 &lt;NA&gt;                   0
+## 10 Frozen II            1450026933  2019             27 Disney                37
+## # … with 40 more rows</code></pre>
+<p>In order to combine my two datasets, I used a left_join since conveniently the variable I wanted to join by was &quot;Title&quot; which is the left-most column on both datasets. By using the left_join, all rows from the first dataset were retained (my_movies) while rows with matches from the second dataset (my_pops) were added. Fortunately, all 50 observations were shared between the two datasets and thus none were dropped. Therefore, the number of observations remained the same while the number of variables went from 3 to 5 since two more new variables were added after the join (&quot;Number of Pops&quot; and &quot;Franchise&quot;).</p>
+</div>
+<div id="wrangling" class="section level2">
+<h2>Wrangling</h2>
+<pre class="r"><code>joined_data %&gt;% filter(Franchise == &quot;Marvel&quot; &amp; Number.of.Pops &gt;= 20)</code></pre>
+<pre><code>## # A tibble: 5 x 6
+##   Title            Worldwide.Gross  Year Number.of.Pops Franchise Most.Expensive
+##   &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+## 1 Avengers: Endga…      2797800564  2019             49 Marvel                49
+## 2 Avengers: Infin…      2048359754  2018             54 Marvel               110
+## 3 Black Panther         1347280838  2018             20 Marvel                37
+## 4 Captain America…      1153329473  2016             22 Marvel               210
+## 5 Captain Marvel        1128274794  2019             24 Marvel                14</code></pre>
+<pre class="r"><code>joined_data %&gt;% filter(Worldwide.Gross &gt; 1000000 &amp; between(Year, 2010, 2020)) %&gt;%
+  arrange(desc(Year)) %&gt;% select(-Number.of.Pops)</code></pre>
+<pre><code>## # A tibble: 41 x 5
+##    Title                          Worldwide.Gross  Year Franchise Most.Expensive
+##    &lt;chr&gt;                                    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+##  1 Avengers: Endgame                   2797800564  2019 Marvel                49
+##  2 The Lion King (Remake)              1656943394  2019 Disney                17
+##  3 Frozen II                           1450026933  2019 Disney                37
+##  4 Spider-Man: Far From Home           1131927996  2019 Marvel                19
+##  5 Captain Marvel                      1128274794  2019 Marvel                14
+##  6 Joker                               1074251311  2019 &lt;NA&gt;                   0
+##  7 Star Wars: The Rise of Skywal…      1074144248  2019 Star Wars           1320
+##  8 Toy Story 4                         1073394593  2019 Disney                42
+##  9 Aladdin                             1050693953  2019 Disney                33
+## 10 Avengers: Infinity War              2048359754  2018 Marvel               110
+## # … with 31 more rows</code></pre>
+<pre class="r"><code>joined_data %&gt;% mutate(percent.change = (Worldwide.Gross - lead(Worldwide.Gross))/ lead(Worldwide.Gross)) %&gt;% select(-Number.of.Pops, -Franchise)</code></pre>
+<pre><code>## # A tibble: 50 x 5
+##    Title                     Worldwide.Gross  Year Most.Expensive percent.change
+##    &lt;chr&gt;                               &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;
+##  1 Avengers: Endgame              2797800564  2019             49        0.00264
+##  2 Avatar                         2790439000  2009              0        0.272  
+##  3 Titanic                        2194439542  1997             26        0.0610 
+##  4 Star Wars: The Force Awa…      2068223624  2015             42        0.00970
+##  5 Avengers: Infinity War         2048359754  2018            110        0.225  
+##  6 Jurassic World                 1671713208  2015             50        0.00891
+##  7 The Lion King (Remake)         1656943394  2019             17        0.0909 
+##  8 The Avengers                   1518812988  2012           2280        0.00183
+##  9 Furious 7                      1516045911  2015              0        0.0455 
+## 10 Frozen II                      1450026933  2019             37        0.0337 
+## # … with 40 more rows</code></pre>
+<pre class="r"><code>joined_data %&gt;% summarize(mean_gross = mean(Worldwide.Gross), sd_gross = sd(Worldwide.Gross), var_gross = var(Worldwide.Gross), IQR_gross = IQR(Worldwide.Gross), mad_gross = mad(Worldwide.Gross), min_gross = min(Worldwide.Gross), max_gross = max(Worldwide.Gross), median_gross = median(Worldwide.Gross), n_rows = n(), n_franchises = n_distinct(Franchise))</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##   mean_gross sd_gross var_gross IQR_gross mad_gross min_gross max_gross
+##        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1     1.29e9   4.19e8   1.75e17 292695205    1.59e8 968483777    2.80e9
+## # … with 3 more variables: median_gross &lt;dbl&gt;, n_rows &lt;int&gt;, n_franchises &lt;int&gt;</code></pre>
+<pre class="r"><code>joined_data %&gt;% summarize(mean_pops = mean(Number.of.Pops), sd_pops = sd(Number.of.Pops), var_pops = var(Number.of.Pops), IQR_pops = IQR(Number.of.Pops), mad_pops = mad(Number.of.Pops), min_pops = min(Number.of.Pops), max_pops = max(Number.of.Pops), median_pops = median(Number.of.Pops))</code></pre>
+<pre><code>## # A tibble: 1 x 8
+##   mean_pops sd_pops var_pops IQR_pops mad_pops min_pops max_pops median_pops
+##       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1      15.0    14.1     199.     17.8     11.1        0       54        10.5</code></pre>
+<pre class="r"><code>joined_data %&gt;% summarize(mean_expensive = mean(Most.Expensive, na.rm=T), sd_expensive = sd(Most.Expensive, na.rm=T), var_expensive = var(Most.Expensive, na.rm=T), IQR_expensive = IQR(Most.Expensive, na.rm=T), mad_expensive = mad(Most.Expensive, na.rm=T), min_expensive = min(Most.Expensive, na.rm=T), max_expensive = max(Most.Expensive, na.rm=T), median_expensive = median(Most.Expensive, na.rm=T))</code></pre>
+<pre><code>## # A tibble: 1 x 8
+##   mean_expensive sd_expensive var_expensive IQR_expensive mad_expensive
+##            &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1           305.         688.       473154.          161.          43.7
+## # … with 3 more variables: min_expensive &lt;dbl&gt;, max_expensive &lt;dbl&gt;,
+## #   median_expensive &lt;dbl&gt;</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(Franchise) %&gt;% summarize(mean_gross = mean(Worldwide.Gross), sd_gross = sd(Worldwide.Gross), max_gross = max(Worldwide.Gross), min_gross = min(Worldwide.Gross), median_gross = median(Worldwide.Gross))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 7 x 6
+##   Franchise     mean_gross   sd_gross  max_gross  min_gross median_gross
+##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;
+## 1 Disney       1142206721. 185778523. 1656943394  968483777   1066179725
+## 2 Harry Potter 1107293978. 203697808. 1342025430  976941486   1002915019
+## 3 Heroes       1079453006   71933000. 1148485886 1004934033   1084939099
+## 4 Marvel       1527044836. 557527509. 2797800564 1128274794   1347280838
+## 5 Movies       1300589916. 390509641. 2194439542 1021103568   1123794079
+## 6 Star Wars    1311601942. 440334202. 2068223624 1027044677   1074144248
+## 7 &lt;NA&gt;         1654875247. 778684941. 2790439000 1074251311   1377405338</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(Franchise, Year) %&gt;% summarize(mean_pops = mean(Number.of.Pops), max_pops = max(Number.of.Pops))</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;Franchise&#39; (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 39 x 4
+## # Groups:   Franchise [7]
+##    Franchise  Year mean_pops max_pops
+##    &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Disney     1994      23         23
+##  2 Disney     2006       6          6
+##  3 Disney     2010      17.5       29
+##  4 Disney     2011       3          3
+##  5 Disney     2013      18         26
+##  6 Disney     2015       7          7
+##  7 Disney     2016       3.5        5
+##  8 Disney     2017      11.5       12
+##  9 Disney     2018      18         18
+## 10 Disney     2019      17.5       27
+## # … with 29 more rows</code></pre>
+<pre class="r"><code>library(tibble)
+untidy_cor &lt;- joined_data %&gt;% select_if(is.numeric) %&gt;% cor(use=&quot;pair&quot;)
+cor_data &lt;- untidy_cor %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;var1&quot;) %&gt;% 
+  pivot_longer(-1, names_to=&quot;var2&quot;, values_to = &quot;correlation&quot;)
+cor_data</code></pre>
+<pre><code>## # A tibble: 16 x 3
+##    var1            var2            correlation
+##    &lt;chr&gt;           &lt;chr&gt;                 &lt;dbl&gt;
+##  1 Worldwide.Gross Worldwide.Gross      1     
+##  2 Worldwide.Gross Year                 0.0946
+##  3 Worldwide.Gross Number.of.Pops       0.326 
+##  4 Worldwide.Gross Most.Expensive      -0.103 
+##  5 Year            Worldwide.Gross      0.0946
+##  6 Year            Year                 1     
+##  7 Year            Number.of.Pops       0.216 
+##  8 Year            Most.Expensive      -0.195 
+##  9 Number.of.Pops  Worldwide.Gross      0.326 
+## 10 Number.of.Pops  Year                 0.216 
+## 11 Number.of.Pops  Number.of.Pops       1     
+## 12 Number.of.Pops  Most.Expensive       0.105 
+## 13 Most.Expensive  Worldwide.Gross     -0.103 
+## 14 Most.Expensive  Year                -0.195 
+## 15 Most.Expensive  Number.of.Pops       0.105 
+## 16 Most.Expensive  Most.Expensive       1</code></pre>
+<p>First I created two filters: one where I wanted to only look at Marvel movies that had more than 20 Funko Pop figures created for that specific movie and one where I wanted to only look at recent movies from the past decade where the movie grossed more than $1,000,000 worldwide. The second filtered line also includes an arrange function which organized the observations by year in a descending order (most recent movies first). In addition, we only want data pertaining to the actual movies themselves, thus I selected out Number.of.Pops so that only the four columns that describe the movies remained (note: Franchise specifically pertains to the Funko Pop franchise line the movie belongs to, but is useful to describe the movie franchise as well). Next, I wanted to see the percent change ascending by comparing how much more the higher-grossing movie earned compared to the movie right underneath it in the rank. This was achieved with mutate in order to add another column titled &quot;percent.change&quot; and I also removed the two columns pertaining to Pops in order to focus solely on the movie gross incomes.</p>
+<p>The next three lines of code focuses on summary statistics using the function summarize() and the unique functions inside summarize (mean, sd, var, IQR, mad, min, max, median, n(), and n_distinct). Var measures how far the values are from the mean, IQR finds the interquartile range, mad measures the median absolute deviation from the median, n() measure the total number of rows, and n_distinct() measures the total number of distinct rows. These were done on the three numerical variables Worldwide.Gross, Number.of.Pops, and Most.Expensive. The Year variable was not included since taking the means, sd, and so on did not seem to make sense with the years the movies came out. For the Most.Expensive variable, na.rm=T was implemented since there were NA values within the variable while the other two numerical variables did not. The average number of Pops produced for a movie was 15 while the average of all the most expensive Pops for each movie was $331. After this, I used group_by in order to subset the Franchise variable and group them back together to return the mean and standard deviations for the Worldwide Gross. Following that, two categorical variables were simultaneously grouped (Franchise and Year) in order for us to group the mean and max values of Number of Pops based on these two categorical variables. Lastly, a correlation matrix was created which compared all numerical variables to all the other numeric variables. There seemed to be a high correlation between the worldwide gross and the number of pops (about 32%) and a negative correlation between worldwide gross and most expensive pop in the line (about -10%).</p>
+</div>
+<div id="visualizing" class="section level2">
+<h2>Visualizing</h2>
+<pre class="r"><code>library(ggplot2)
+cor_data %&gt;% ggplot(aes(var1, var2, fill=correlation)) + geom_tile() + geom_text(aes(label=round(correlation,2))) + xlab(&quot;&quot;) + ylab(&quot;&quot;) + coord_fixed() + scale_fill_gradient2(low=&quot;red&quot;, mid=&quot;white&quot;, high=&quot;blue&quot;) + theme(axis.text.x = element_text(angle = 90, vjust=0.5, hjust=1))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(Number.of.Pops, Worldwide.Gross)) + geom_point(aes(color=Franchise)) + geom_smooth(method=&quot;lm&quot;) + ggtitle(&quot;Worldwide Gross vs. Number of Pops by Franchise&quot;) + xlab(&quot;Number of Pops&quot;) + ylab(&quot;Worldwide Gross ($)&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(x=Year, y=Most.Expensive, fill=Franchise)) + geom_bar(stat=&quot;summary&quot;, position=&quot;dodge&quot;) + scale_x_continuous(breaks = seq(1990,2020,5)) + scale_y_continuous(breaks=seq(0, 5000, 500)) + ggtitle(&quot;Most Expensive Pops per year by Franchise&quot;) + ylab(&quot;Most Expensive Pops ($)&quot;)</code></pre>
+<pre><code>## No summary function supplied, defaulting to `mean_se()`</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-3.png" width="672" /> Using the correlation data from the previous section, I generated a correlation heat map that shows the values of correlation for each of the numeric variables in the dataset. The diagonal going from the bottome left to the top right shows the correlation of the variables to themselves, so it makes sense that they would return a correlation of 1. From this map, we can see that there are slightly positive correlations between worldwide gross and number of pops, year and number of pops, and number of pops and most expensive. These relationships were expected as a movie that earns a lot more money (meaning that it is very popular) will have a lot more Funko Pop figures made for it. The Funko company was founded fairly recently (1998) and it did not start making Pops until 2010, so the year the movie came out correlates with the number of pops made for the movie. The reason certain movies like the original Lion King (which was released in 1994) has Pops is because the company decided to make iconic Disney Pops from the past. There is a slightly positive relationship between the number of Pops and the most expensive Pop's price from each movie. The price of a Pop figure depends on various factors such as how long ago it was made, the rarity of it, etc. Therefore it is hard to predict whether a certain movie would have a very high priced Pop figure. Our heat map tells us that a movie that has a higher number of Pop figures made for it has a slightly positive relationship with having a very expensive Pop. There is a negative relationship between the year the movie came out and the movie's most expensive Pop as well as the worldwide gross and the most expensive Pop. As mentioned before, it is hard to predict how high in price a Pop figure will go and thus it is not surprising that there are negative correlations for these variables.</p>
+<p>The second plot is a scatterplot that uses the ggplot function. The variable used on the x-axis is Number of Pops while that of the y-axis is Worldwide Gross. The colors of the dots represent the franchise that the movies belong to. From this data, we can see that there is an overall positive relationship between these two variables with slight variance. This makes sense since, as mentioned before, the more a movie earns worldwide the higher the likelihood that the Funko company will produce more Pop figures for that movie. We can also see that the Marvel, Star Wars, and Movie categories have the highest worldwide gross and highest number of Pops produced. There is an observation that had a high worldwide gross but no Pops created for the movie. This was for the movie &quot;Avatar&quot; and this is likely because the Funko company never received property rights to produce toys from this movie from the movie studio.</p>
+<p>The third plot is a bar graph that uses stat=&quot;summary&quot; to compare the year the movie came out with the most expensive pop value from that movie. Although there is no discernible relationship between these two variables, we can see how varied the most expensive Pops can be from when the movie was released. The Star Wars bar in 1999 had the most expensive Pop value (which is the holographic Darth Maul). There are a lot of factors that shift the value of a Pop figure from year to year. This includes quantity of figures made, exclusivity of the figure, and how old the figure is. If we take the holographic Darth Maul figure for example, it was released in 2012 as an exclusive for San Diego Comic Con with only 480 figures ever produced. In addition, we can see that the most expensive Pops are usually from the Star Wars franchise. Perhaps this is due to the immense popularity of these movies and the frequent production of only a few number of certain figures in this franchise. While Marvel movies are also immensely popular in recent years, there have not been as many over-the-top expensive Pops for this line.</p>
+</div>
+<div id="dimensionality-reduction" class="section level2">
+<h2>Dimensionality Reduction</h2>
+<pre class="r"><code>library(cluster)
+library(GGally)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
+<pre class="r"><code>library(plotly)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<pre class="r"><code>clustdata &lt;- joined_data %&gt;% select(Worldwide.Gross, Number.of.Pops, Most.Expensive)
+pam1 &lt;- clustdata %&gt;% scale %&gt;% pam(2)
+pam1</code></pre>
+<pre><code>## Medoids:
+##      ID Worldwide.Gross Number.of.Pops Most.Expensive
+## [1,]  5       1.8059929      2.7642232     -0.2837778
+## [2,] 23      -0.3429009     -0.2156889     -0.3971726
+## Clustering vector:
+##  [1] 1 2 2 1 1 2 2 2 2 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [39] 2 2 2 2 2 2 2 2 2 2 2 2
+## Objective function:
+##    build     swap 
+## 1.098022 1.098022 
+## 
+## Available components:
+##  [1] &quot;medoids&quot;    &quot;id.med&quot;     &quot;clustering&quot; &quot;objective&quot;  &quot;isolation&quot; 
+##  [6] &quot;clusinfo&quot;   &quot;silinfo&quot;    &quot;diss&quot;       &quot;call&quot;       &quot;data&quot;</code></pre>
+<pre class="r"><code>pamclust &lt;- clustdata %&gt;% mutate(cluster=as.factor(pam1$clustering))
+
+ggpairs(pamclust, columns=1:3, aes(color=cluster))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>plot(pam1,which=2) </code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code>sil_width&lt;-vector()
+for(i in 2:10){
+  pam_fit &lt;- pam(clustdata, diss = TRUE, k = i)
+  sil_width[i] &lt;- pam_fit$silinfo$avg.width
+}</code></pre>
+<pre><code>## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix
+
+## Warning in as.dist.default(x): non-square matrix</code></pre>
+<pre class="r"><code>ggplot()+geom_line(aes(x=1:10,y=sil_width))+scale_x_continuous(name=&quot;k&quot;,breaks=1:10)</code></pre>
+<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<pre class="r"><code>pamclust%&gt;%plot_ly(x= ~Number.of.Pops, y = ~Worldwide.Gross, z = ~Most.Expensive, color= ~cluster,
+                type = &quot;scatter3d&quot;, mode = &quot;markers&quot;) %&gt;%
+  layout(autosize = F, width = 900, height = 400)</code></pre>
+<pre><code>## Warning: Specifying width/height in layout() is now deprecated.
+## Please specify in ggplotly() or plot_ly()</code></pre>
+<pre><code>## Warning: `arrange_()` is deprecated as of dplyr 0.7.0.
+## Please use `arrange()` instead.
+## See vignette(&#39;programming&#39;) for more help
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels
+
+## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
+<div id="htmlwidget-1" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"visdat":{"73545c7fc66":["function () ","plotlyVisDat"]},"cur_data":"73545c7fc66","attrs":{"73545c7fc66":{"x":{},"y":{},"z":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"width":900,"height":400,"margin":{"b":40,"l":60,"t":25,"r":10},"autosize":false,"scene":{"xaxis":{"title":"Number.of.Pops"},"yaxis":{"title":"Worldwide.Gross"},"zaxis":{"title":"Most.Expensive"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[49,54,54,43],"y":[2797800564,2068223624,2048359754,1332539889],"z":[49,42,110,2390],"mode":"markers","type":"scatter3d","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"frame":null},{"x":[0,3,7,10,12,0,27,15,20,21,6,26,11,18,0,7,7,22,12,25,15,24,4,1,3,4,0,40,25,29,6,31,8,3,12,12,2,9,6,5,4,5,7,15,10,23],"y":[2790439000,2194439542,1671713208,1656943394,1518812988,1516045911,1450026933,1402805868,1347280838,1342025430,1309484461,1290000000,1263521126,1242805359,1238764765,1214811252,1159398397,1153329473,1148485886,1142219401,1131927996,1128274794,1123794079,1108561013,1104054072,1084939099,1074251311,1074144248,1073394593,1066969703,1066179725,1056057273,1050693953,1045713802,1034799409,1029939903,1028570889,1027044677,1025467110,1023784195,1021103568,1004934033,1002915019,976941486,970761885,968483777],"z":[0,26,50,17,2280,0,37,75,37,190,50,55,18,44,0,520,40,210,32,180,19,14,36,10,36,900,0,1320,42,24,270,210,33,27,26,55,13,3530,720,33,310,850,95,115,40,80],"mode":"markers","type":"scatter3d","name":"2","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>For this section, I first had to take my joined dataset and select out only the numerical variables and create a new dataset with these columns only. Next, I used the PAM function with this new dataset which I scaled in order to process my numeric variables. The PAM function was what I used to run a cluster analysis for my dataset. The number of clusters I used is 2 because initially I did not know how many clusters would give me the best fit for my dataset but using the silhouette code later on, I found that using 2 clusters was the best option. Before moving on, I created another dataset that took clustdata, which only had my numeric variables, and added another column with mutate that contained the cluster assignments for each observation. This will be useful to color the points when we create the ggplot. I then decided to visualize all pairwise combinations with ggpairs. There are only three numerical variables so only three columns are seen. We can see the correlations and the clusters using this visual. The colors in this visual are assigned to the cluster groupings for the data. I then interpreted my average silhouette width by plotting it and I found that it was 0.59. This value means that a reasonable structure has been found. This test was used to evaluate the goodness-of-fit of our dataset. Following that, I had put in the code to determine how many clusters would best fit my dataset with the silhouette method. This tells me that 2 clusters is the best since it had the highest silhouette width. This code starts off with an empty vector which I then followed with a &quot;for&quot; function that takes the information from the silhouette widths. The ggplot code is then used to plot and the x-axis was scaled from 1 to 10.</p>
+<p>Finally, I took the three numerical variables and visualized the clusters with the plotly tool. This gave a 3D rendition of the three variables on the x, y, and z planes. The three numerical variables are Worldwide.Gross, Number.of.Pops, and Most.Expensive. There are only 2 clusters in the visual since that was what the silhouette test gave as the most fit number of clusters. The cluster variable was assigned the color of the dots. Interpreting the clusters, we can see that the two clusters are divided into those at the lower end of all variables and those at the higher end. In other words, the first cluster took the movies that grossed the least worldwide, had the fewest number of Pops made for it, and had the smallest value for its most expensive Pop. The second cluster is a little harder to explain. Most of the points seem to indicate that these movies grossed the most and had the most number of Pops but did not have very expensive Pops. The most likely reason is that we have seen how there is a negative correlation between worldwide gross and most expensive Pop while there is only a slightly positive correlation between number of pops and most expensive. So there is much ambiguity when it comes to comparing our values while including the most expensive Pop's value since this variable does not seem to correlate with any other variable. Nevertheless, we see that the two clusters divided our dataset into the lower half of grossing movies/number of Pops and the higher half of grossing movies/number of Pops.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

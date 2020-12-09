@@ -1,5 +1,5 @@
 ---
-title: Test Post
+title: The Story between R and Python
 author: ''
 date: '2020-12-06'
 slug: test-post
@@ -13,18 +13,19 @@ description: ''
 
 [Link to google](https://www.google.com)
 
+
+Hello! In this blog, I will demonstrate how you can use reticulate to get R and Python to talk to each other! I'm also making a histogram of quakes just to show you that R is indeed working well by itself. Let's get started!
 ```{r}
 hist(quakes$depth)
+library(reticulate)
+yes <- "Drugs are bad"
 ```
 
 
-```{r}
-quakes <- quakes
-```
-
-
+After making some R stuff, I will now use Python to connect the two.
 ```{python}
-r.quakes.mag.mean()
+no="Mmnkay"
+print(r.yes,no)
 ```
 
 

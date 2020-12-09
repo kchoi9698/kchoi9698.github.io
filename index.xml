@@ -26,25 +26,15 @@
     </item>
     
     <item>
-      <title>Test Post</title>
+      <title>The Story between R and Python</title>
       <link>/post/2020/12/06/test-post/</link>
       <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/2020/12/06/test-post/</guid>
-      <description>  Blog Post 1 Link to project 1
+      <description>Blog Post 1 Link to project 1
 Link to google
-hist(quakes$depth) quakes &amp;lt;- quakes r.quakes.mag.mean() ## 4.6204000000000001   </description>
-    </item>
-    
-    <item>
-      <title>Hello R Markdown</title>
-      <link>/post/2015/07/23/hello-r-markdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
-      
-      <guid>/post/2015/07/23/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+Hello! In this blog, I will demonstrate how you can use reticulate to get R and Python to talk to each other! I&#39;m also making a histogram of quakes just to show you that R is indeed working well by itself. Let&#39;s get started!
+hist(quakes$depth) library(reticulate) yes &amp;lt;- &amp;quot;Drugs are bad&amp;quot; After making some R stuff, I will now use Python to connect the two.</description>
     </item>
     
     <item>
